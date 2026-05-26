@@ -34,6 +34,9 @@
                 <?php if (Auth::hasRole('admin')): ?>
                 <li class="nav-item"><a class="nav-link <?= basename($_SERVER['PHP_SELF']) === 'users.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>/admin/users.php"><i class="bi bi-people-fill"></i>Usuários</a></li>
                 <?php endif; ?>
+                <?php if (Auth::hasRole(['admin', 'designer', 'production'])): ?>
+                <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/production/tv.php" target="_blank"><i class="bi bi-tv-fill"></i>TV</a></li>
+                <?php endif; ?>
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown user-dropdown">
