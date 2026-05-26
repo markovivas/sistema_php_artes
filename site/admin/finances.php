@@ -48,112 +48,114 @@ $title = 'Financeiro';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="row mb-4">
+<div class="page-header">
+    <h4><i class="bi bi-cash-stack text-success me-2"></i>Financeiro</h4>
+</div>
+
+<div class="row g-3 mb-4">
     <div class="col-md-3">
-        <div class="card text-bg-success">
-            <div class="card-body">
-                <h5>A Receber</h5>
-                <h3><?= formatMoney($totals['a_receber']) ?></h3>
-            </div>
+        <div class="stat-card bg-gradient-success">
+            <i class="bi bi-arrow-down-circle stat-icon"></i>
+            <div class="stat-value"><?= formatMoney($totals['a_receber']) ?></div>
+            <p class="stat-label">A Receber</p>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-bg-danger">
-            <div class="card-body">
-                <h5>A Pagar</h5>
-                <h3><?= formatMoney($totals['a_pagar']) ?></h3>
-            </div>
+        <div class="stat-card bg-gradient-danger">
+            <i class="bi bi-arrow-up-circle stat-icon"></i>
+            <div class="stat-value"><?= formatMoney($totals['a_pagar']) ?></div>
+            <p class="stat-label">A Pagar</p>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-bg-info">
-            <div class="card-body">
-                <h5>Recebido</h5>
-                <h3><?= formatMoney($totals['recebido']) ?></h3>
-            </div>
+        <div class="stat-card bg-gradient-info">
+            <i class="bi bi-check-circle stat-icon"></i>
+            <div class="stat-value"><?= formatMoney($totals['recebido']) ?></div>
+            <p class="stat-label">Recebido</p>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card text-bg-secondary">
-            <div class="card-body">
-                <h5>Pago</h5>
-                <h3><?= formatMoney($totals['pago']) ?></h3>
-            </div>
+        <div class="stat-card bg-gradient-secondary">
+            <i class="bi bi-check-circle-fill stat-icon"></i>
+            <div class="stat-value"><?= formatMoney($totals['pago']) ?></div>
+            <p class="stat-label">Pago</p>
         </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row g-3">
     <div class="col-md-4">
         <div class="card">
-            <div class="card-header"><h6 class="mb-0">Nova Movimentação</h6></div>
+            <div class="card-header">Nova Movimentação</div>
             <div class="card-body">
                 <form method="POST">
                     <div class="mb-2">
-                        <label class="form-label">Tipo</label>
-                        <select name="type" class="form-select" required>
+                        <label class="form-label small">Tipo</label>
+                        <select name="type" class="form-select form-modern" required>
                             <option value="receber">A Receber</option>
                             <option value="pagar">A Pagar</option>
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Descrição</label>
-                        <input type="text" name="description" class="form-control" required>
+                        <label class="form-label small">Descrição</label>
+                        <input type="text" name="description" class="form-control form-modern" required>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Valor</label>
-                        <input type="text" name="value" class="form-control" placeholder="0,00" required>
+                        <label class="form-label small">Valor</label>
+                        <input type="text" name="value" class="form-control form-modern" placeholder="0,00" required>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-select">
+                        <label class="form-label small">Status</label>
+                        <select name="status" class="form-select form-modern">
                             <option value="pendente">Pendente</option>
                             <option value="pago">Pago</option>
                         </select>
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Vencimento</label>
-                        <input type="date" name="due_date" class="form-control">
+                        <label class="form-label small">Vencimento</label>
+                        <input type="date" name="due_date" class="form-control form-modern">
                     </div>
                     <div class="mb-2">
-                        <label class="form-label">Pedido (opcional)</label>
-                        <input type="number" name="order_id" class="form-control" placeholder="#ID">
+                        <label class="form-label small">Pedido (opcional)</label>
+                        <input type="number" name="order_id" class="form-control form-modern" placeholder="#ID">
                     </div>
-                    <button type="submit" name="save" class="btn btn-primary w-100">Registrar</button>
+                    <button type="submit" name="save" class="btn btn-modern btn-primary w-100">Registrar</button>
                 </form>
             </div>
         </div>
     </div>
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header"><h6 class="mb-0">Movimentações</h6></div>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Movimentações</span>
+            </div>
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="table-dark">
+                <table class="table table-modern">
+                    <thead>
                         <tr>
                             <th>Tipo</th>
                             <th>Descrição</th>
                             <th>Valor</th>
                             <th>Status</th>
                             <th>Vencimento</th>
-                            <th>Ações</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($entries as $e): ?>
                         <tr>
-                            <td><span class="badge bg-<?= $e['type'] === 'receber' ? 'success' : 'danger' ?>"><?= $e['type'] === 'receber' ? 'Receber' : 'Pagar' ?></span></td>
+                            <td><span class="badge badge-modern bg-<?= $e['type'] === 'receber' ? 'success' : 'danger' ?>"><?= $e['type'] === 'receber' ? 'Receber' : 'Pagar' ?></span></td>
                             <td><?= htmlspecialchars($e['description']) ?></td>
-                            <td><?= formatMoney($e['value']) ?></td>
+                            <td class="fw-semibold"><?= formatMoney($e['value']) ?></td>
                             <td>
-                                <span class="badge bg-<?= $e['status'] === 'pago' ? 'success' : ($e['status'] === 'vencido' ? 'danger' : 'warning') ?>">
+                                <span class="badge badge-modern bg-<?= $e['status'] === 'pago' ? 'success' : ($e['status'] === 'vencido' ? 'danger' : 'warning') ?>">
                                     <?= ucfirst($e['status']) ?>
                                 </span>
                             </td>
-                            <td><?= $e['due_date'] ? formatDate($e['due_date'], 'd/m/Y') : '—' ?></td>
+                            <td class="text-muted"><?= $e['due_date'] ? formatDate($e['due_date'], 'd/m/Y') : '—' ?></td>
                             <td>
                                 <?php if ($e['status'] === 'pendente'): ?>
-                                <a href="?pay=<?= $e['id'] ?>" class="btn btn-sm btn-success">Baixar</a>
+                                <a href="?pay=<?= $e['id'] ?>" class="btn btn-modern btn-outline btn-sm text-success"><i class="bi bi-check-lg"></i></a>
                                 <?php endif; ?>
                             </td>
                         </tr>

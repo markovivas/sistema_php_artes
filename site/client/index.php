@@ -21,56 +21,56 @@ $orders = $db->fetchAll("
     FROM orders o
     LEFT JOIN users u ON o.designer_id = u.id
     WHERE o.client_id = ?
-    ORDER BY o.created_at DESC LIMIT 10
+    ORDER BY FIELD(o.priority, 'urgente','alta','normal','baixa'), o.created_at DESC LIMIT 10
 ", [$user['id']]);
 
 $title = 'Meu Painel';
 require_once __DIR__ . '/../includes/header.php';
 ?>
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-bg-primary">
-            <div class="card-body">
-                <h5 class="card-title"><?= $counts['total'] ?? 0 ?></h5>
-                <p class="card-text">Total de Pedidos</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-warning">
-            <div class="card-body">
-                <h5 class="card-title"><?= $counts['andamento'] ?? 0 ?></h5>
-                <p class="card-text">Em Andamento</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-secondary">
-            <div class="card-body">
-                <h5 class="card-title"><?= $counts['pendentes'] ?? 0 ?></h5>
-                <p class="card-text">Aprovação Pendente</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-bg-success">
-            <div class="card-body">
-                <h5 class="card-title"><?= $counts['finalizados'] ?? 0 ?></h5>
-                <p class="card-text">Finalizados</p>
-            </div>
-        </div>
-    </div>
+<div class="page-header">
+    <h4><i class="bi bi-house-fill text-primary me-2"></i>Meu Painel</h4>
+    <a href="orders.php?action=new" class="btn btn-modern btn-primary"><i class="bi bi-plus-lg me-1"></i>Novo Pedido</a>
 </div>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>Meus Pedidos</h4>
-    <a href="orders.php?action=new" class="btn btn-primary">+ Novo Pedido</a>
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-primary">
+            <i class="bi bi-box-seam-fill stat-icon"></i>
+            <div class="stat-value"><?= $counts['total'] ?? 0 ?></div>
+            <p class="stat-label">Total de Pedidos</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-warning">
+            <i class="bi bi-arrow-repeat stat-icon"></i>
+            <div class="stat-value"><?= $counts['andamento'] ?? 0 ?></div>
+            <p class="stat-label">Em Andamento</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-info">
+            <i class="bi bi-clock-history stat-icon"></i>
+            <div class="stat-value"><?= $counts['pendentes'] ?? 0 ?></div>
+            <p class="stat-label">Aprovação Pendente</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card bg-gradient-success">
+            <i class="bi bi-check2-all stat-icon"></i>
+            <div class="stat-value"><?= $counts['finalizados'] ?? 0 ?></div>
+            <p class="stat-label">Finalizados</p>
+        </div>
+    </div>
 </div>
 
 <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Últimos Pedidos</span>
+        <a href="orders.php" class="btn btn-sm btn-modern btn-outline">Ver todos</a>
+    </div>
     <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead class="table-dark">
+        <table class="table table-modern">
+            <thead>
                 <tr>
                     <th>#</th>
                     <th>Título</th>
@@ -78,22 +78,22 @@ require_once __DIR__ . '/../includes/header.php';
                     <th>Prioridade</th>
                     <th>Status</th>
                     <th>Data</th>
-                    <th>Ações</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($orders)): ?>
-                <tr><td colspan="7" class="text-center py-4">Nenhum pedido encontrado.</td></tr>
+                <tr><td colspan="7" class="text-center py-4 text-muted">Nenhum pedido encontrado.</td></tr>
                 <?php else: ?>
                 <?php foreach ($orders as $o): ?>
                 <tr>
-                    <td>#<?= $o['id'] ?></td>
+                    <td class="fw-semibold">#<?= $o['id'] ?></td>
                     <td><?= htmlspecialchars($o['title']) ?></td>
                     <td><?= htmlspecialchars($o['designer_name'] ?? '—') ?></td>
-                    <td><span class="badge bg-<?= priorityClass($o['priority']) ?>"><?= ORDER_PRIORITY[$o['priority']] ?></span></td>
-                    <td><span class="badge bg-<?= statusClass($o['status']) ?>"><?= ORDER_STATUS[$o['status']] ?></span></td>
-                    <td><?= formatDate($o['created_at'], 'd/m/Y') ?></td>
-                    <td><a href="order-detail.php?id=<?= $o['id'] ?>" class="btn btn-sm btn-outline-primary">Detalhes</a></td>
+                    <td><span class="badge badge-modern bg-<?= priorityClass($o['priority']) ?>"><?= ORDER_PRIORITY[$o['priority']] ?></span></td>
+                    <td><span class="badge badge-modern bg-<?= statusClass($o['status']) ?>"><?= ORDER_STATUS[$o['status']] ?></span></td>
+                    <td class="text-muted"><?= formatDate($o['created_at'], 'd/m/Y') ?></td>
+                    <td><a href="order-detail.php?id=<?= $o['id'] ?>" class="btn btn-modern btn-outline btn-sm"><i class="bi bi-arrow-right"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
                 <?php endif; ?>

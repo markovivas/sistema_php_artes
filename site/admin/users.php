@@ -6,7 +6,6 @@ Auth::requireRole('admin');
 
 $db = Database::getInstance();
 
-// Criar/Editar usuário
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
@@ -27,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
     exit;
 }
 
-// Excluir
 if (isset($_GET['delete'])) {
     $db->query("DELETE FROM users WHERE id = ? AND role != 'admin'", [$_GET['delete']]);
     header('Location: users.php');
@@ -44,36 +42,40 @@ $title = 'Gerenciar Usuários';
 require_once __DIR__ . '/../includes/header.php';
 ?>
 
-<div class="row">
+<div class="page-header">
+    <h4><i class="bi bi-people-fill text-primary me-2"></i>Usuários</h4>
+</div>
+
+<div class="row g-3">
     <div class="col-md-4">
         <div class="card">
-            <div class="card-header"><h6 class="mb-0"><?= $editUser ? 'Editar' : 'Novo' ?> Usuário</h6></div>
+            <div class="card-header"><?= $editUser ? 'Editar' : 'Novo' ?> Usuário</div>
             <div class="card-body">
                 <form method="POST">
                     <input type="hidden" name="id" value="<?= $editUser['id'] ?? '' ?>">
                     <div class="mb-3">
-                        <label class="form-label">Nome</label>
-                        <input type="text" name="name" class="form-control" value="<?= htmlspecialchars($editUser['name'] ?? '') ?>" required>
+                        <label class="form-label small">Nome</label>
+                        <input type="text" name="name" class="form-control form-modern" value="<?= htmlspecialchars($editUser['name'] ?? '') ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">E-mail</label>
-                        <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($editUser['email'] ?? '') ?>" required>
+                        <label class="form-label small">E-mail</label>
+                        <input type="email" name="email" class="form-control form-modern" value="<?= htmlspecialchars($editUser['email'] ?? '') ?>" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Senha <?= $editUser ? '(deixe em branco para manter)' : '' ?></label>
-                        <input type="password" name="password" class="form-control" <?= $editUser ? '' : 'required' ?>>
+                        <label class="form-label small">Senha <?= $editUser ? '(deixe em branco)' : '' ?></label>
+                        <input type="password" name="password" class="form-control form-modern" <?= $editUser ? '' : 'required' ?>>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Perfil</label>
-                        <select name="role" class="form-select" required>
+                        <label class="form-label small">Perfil</label>
+                        <select name="role" class="form-select form-modern" required>
                             <?php foreach (ROLES as $key => $label): ?>
                             <option value="<?= $key ?>" <?= ($editUser['role'] ?? '') === $key ? 'selected' : '' ?>><?= $label ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <button type="submit" name="save" class="btn btn-primary w-100">Salvar</button>
+                    <button type="submit" name="save" class="btn btn-modern btn-primary w-100">Salvar</button>
                     <?php if ($editUser): ?>
-                    <a href="users.php" class="btn btn-secondary w-100 mt-1">Cancelar</a>
+                    <a href="users.php" class="btn btn-modern btn-outline w-100 mt-1">Cancelar</a>
                     <?php endif; ?>
                 </form>
             </div>
@@ -81,29 +83,29 @@ require_once __DIR__ . '/../includes/header.php';
     </div>
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header"><h6 class="mb-0">Usuários</h6></div>
+            <div class="card-header">Todos os Usuários</div>
             <div class="card-body p-0">
-                <table class="table table-hover mb-0">
-                    <thead class="table-dark">
+                <table class="table table-modern">
+                    <thead>
                         <tr>
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Perfil</th>
                             <th>Ativo</th>
-                            <th>Ações</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($users as $u): ?>
                         <tr>
-                            <td><?= htmlspecialchars($u['name']) ?></td>
+                            <td class="fw-semibold"><?= htmlspecialchars($u['name']) ?></td>
                             <td><?= htmlspecialchars($u['email']) ?></td>
-                            <td><span class="badge bg-info"><?= ROLES[$u['role']] ?></span></td>
-                            <td><?= $u['active'] ? '✅' : '❌' ?></td>
+                            <td><span class="badge badge-modern bg-info"><?= ROLES[$u['role']] ?></span></td>
+                            <td><?= $u['active'] ? '<span class="text-success"><i class="bi bi-check-circle-fill"></i></span>' : '<span class="text-danger"><i class="bi bi-x-circle-fill"></i></span>' ?></td>
                             <td>
-                                <a href="?edit=<?= $u['id'] ?>" class="btn btn-sm btn-outline-primary">Editar</a>
+                                <a href="?edit=<?= $u['id'] ?>" class="btn btn-modern btn-outline btn-sm"><i class="bi bi-pencil"></i></a>
                                 <?php if ($u['role'] !== 'admin'): ?>
-                                <a href="?delete=<?= $u['id'] ?>" class="btn btn-sm btn-outline-danger" onclick="return confirm('Excluir?')">Excluir</a>
+                                <a href="?delete=<?= $u['id'] ?>" class="btn btn-modern btn-outline btn-sm text-danger" onclick="return confirm('Excluir este usuário?')"><i class="bi bi-trash"></i></a>
                                 <?php endif; ?>
                             </td>
                         </tr>

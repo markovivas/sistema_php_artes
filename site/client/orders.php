@@ -31,31 +31,33 @@ if ($action === 'new') {
     $title = 'Novo Pedido';
     require_once __DIR__ . '/../includes/header.php';
 ?>
+<div class="page-header">
+    <h4><i class="bi bi-plus-circle text-primary me-2"></i>Novo Pedido</h4>
+</div>
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header"><h5 class="mb-0">Novo Pedido</h5></div>
             <div class="card-body">
                 <form method="POST">
                     <div class="mb-3">
-                        <label class="form-label">Título do Pedido</label>
-                        <input type="text" name="title" class="form-control" required>
+                        <label class="form-label small">Título do Pedido</label>
+                        <input type="text" name="title" class="form-control form-modern" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Briefing / Descrição</label>
-                        <textarea name="description" class="form-control" rows="6" required></textarea>
+                        <label class="form-label small">Briefing / Descrição</label>
+                        <textarea name="description" class="form-control form-modern" rows="6" required></textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Prioridade</label>
-                        <select name="priority" class="form-select">
+                        <label class="form-label small">Prioridade</label>
+                        <select name="priority" class="form-select form-modern">
                             <option value="baixa">Baixa</option>
                             <option value="normal" selected>Normal</option>
                             <option value="alta">Alta</option>
                             <option value="urgente">Urgente</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Criar Pedido</button>
-                    <a href="index.php" class="btn btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-modern btn-primary">Criar Pedido</button>
+                    <a href="index.php" class="btn btn-modern btn-outline">Cancelar</a>
                 </form>
             </div>
         </div>
@@ -71,21 +73,21 @@ $orders = $db->fetchAll("
     FROM orders o
     LEFT JOIN users u ON o.designer_id = u.id
     WHERE o.client_id = ?
-    ORDER BY o.created_at DESC
+    ORDER BY FIELD(o.priority, 'urgente','alta','normal','baixa'), o.created_at DESC
 ", [$user['id']]);
 
 $title = 'Meus Pedidos';
 require_once __DIR__ . '/../includes/header.php';
 ?>
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>Meus Pedidos</h4>
-    <a href="?action=new" class="btn btn-primary">+ Novo Pedido</a>
+<div class="page-header">
+    <h4><i class="bi bi-file-earmark-text-fill text-primary me-2"></i>Meus Pedidos</h4>
+    <a href="?action=new" class="btn btn-modern btn-primary"><i class="bi bi-plus-lg me-1"></i>Novo Pedido</a>
 </div>
 
 <div class="card">
     <div class="card-body p-0">
-        <table class="table table-hover mb-0">
-            <thead class="table-dark">
+        <table class="table table-modern">
+            <thead>
                 <tr>
                     <th>#</th>
                     <th>Título</th>
@@ -93,19 +95,19 @@ require_once __DIR__ . '/../includes/header.php';
                     <th>Prioridade</th>
                     <th>Status</th>
                     <th>Data</th>
-                    <th>Ações</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($orders as $o): ?>
                 <tr>
-                    <td>#<?= $o['id'] ?></td>
+                    <td class="fw-semibold">#<?= $o['id'] ?></td>
                     <td><?= htmlspecialchars($o['title']) ?></td>
                     <td><?= htmlspecialchars($o['designer_name'] ?? '—') ?></td>
-                    <td><span class="badge bg-<?= priorityClass($o['priority']) ?>"><?= ORDER_PRIORITY[$o['priority']] ?></span></td>
-                    <td><span class="badge bg-<?= statusClass($o['status']) ?>"><?= ORDER_STATUS[$o['status']] ?></span></td>
-                    <td><?= formatDate($o['created_at'], 'd/m/Y') ?></td>
-                    <td><a href="order-detail.php?id=<?= $o['id'] ?>" class="btn btn-sm btn-outline-primary">Detalhes</a></td>
+                    <td><span class="badge badge-modern bg-<?= priorityClass($o['priority']) ?>"><?= ORDER_PRIORITY[$o['priority']] ?></span></td>
+                    <td><span class="badge badge-modern bg-<?= statusClass($o['status']) ?>"><?= ORDER_STATUS[$o['status']] ?></span></td>
+                    <td class="text-muted"><?= formatDate($o['created_at'], 'd/m/Y') ?></td>
+                    <td><a href="order-detail.php?id=<?= $o['id'] ?>" class="btn btn-modern btn-outline btn-sm"><i class="bi bi-arrow-right"></i></a></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
