@@ -11,11 +11,25 @@ $db = Database::getInstance();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     $orderId = (int)$_POST['order_id'];
     $newStatus = $_POST['status'];
+
+    $o = $db->fetch("SELECT client_id, designer_id, title FROM orders WHERE id = ?", [$orderId]);
+
     $db->query("UPDATE orders SET status = ? WHERE id = ?", [$newStatus, $orderId]);
     $db->insert(
         "INSERT INTO order_timeline (order_id, user_id, action, description) VALUES (?, ?, 'status_update', 'Status alterado para: " . ORDER_STATUS[$newStatus] . "')",
         [$orderId, $user['id']]
     );
+
+    $statusLabel = ORDER_STATUS[$newStatus];
+    if ($newStatus === 'aguardando_cliente') {
+        addNotification($o['client_id'], "Pedido #{$orderId} — {$o['title']} está aguardando sua aprovação!", "/client/order-detail.php?id={$orderId}");
+    } elseif ($newStatus === 'finalizado') {
+        addNotification($o['client_id'], "Pedido #{$orderId} — {$o['title']} foi finalizado!", "/client/order-detail.php?id={$orderId}");
+    }
+    if ($o['designer_id'] && $o['designer_id'] != $user['id']) {
+        addNotification($o['designer_id'], "Pedido #{$orderId} — status alterado para: {$statusLabel}", "/client/order-detail.php?id={$orderId}");
+    }
+
     header('Content-Type: application/json');
     echo json_encode(['success' => true]);
     exit;
@@ -25,13 +39,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign'])) {
     $orderId = (int)$_POST['order_id'];
     $designerId = (int)$_POST['designer_id'];
+    $o = $db->fetch("SELECT client_id, title FROM orders WHERE id = ?", [$orderId]);
     $db->query("UPDATE orders SET designer_id = ? WHERE id = ?", [$designerId, $orderId]);
     $db->insert(
         "INSERT INTO order_timeline (order_id, user_id, action, description) VALUES (?, ?, 'atribuido', 'Designer atribuído ao pedido')",
         [$orderId, $user['id']]
     );
+    $designerName = $db->fetch("SELECT name FROM users WHERE id = ?", [$designerId])['name'] ?? '';
+    if ($designerId > 0) {
+        addNotification($designerId, "Você foi atribuído ao pedido #{$orderId} — {$o['title']}", "/client/order-detail.php?id={$orderId}");
+    }
     header('Content-Type: application/json');
-    echo json_encode(['success' => true, 'designer_name' => $db->fetch("SELECT name FROM users WHERE id = ?", [$designerId])['name']]);
+    echo json_encode(['success' => true, 'designer_name' => $designerName]);
     exit;
 }
 

@@ -67,6 +67,11 @@ function getUnreadNotifications($userId) {
     );
 }
 
+function markNotificationsRead($userId) {
+    $db = Database::getInstance();
+    $db->query("UPDATE notifications SET read_at = NOW() WHERE user_id = ? AND read_at IS NULL", [$userId]);
+}
+
 function uploadFile($file, $orderId, $userId) {
     $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
     $allowed = ['png', 'jpg', 'jpeg', 'gif', 'pdf', 'psd', 'ai', 'cdr', 'mp4', 'avi', 'mov'];

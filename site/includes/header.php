@@ -43,7 +43,30 @@
                 <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/production/tv.php" target="_blank"><i class="bi bi-tv-fill"></i>TV</a></li>
                 <?php endif; ?>
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav align-items-center">
+                <?php if (Auth::check()): ?>
+                <?php $unreadNotifs = getUnreadNotifications(Auth::user()['id']); ?>
+                <li class="nav-item dropdown" id="notifDropdown">
+                    <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" id="notifBell">
+                        <i class="bi bi-bell fs-5"></i>
+                        <span id="notifCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:.55rem;<?= count($unreadNotifs) === 0 ? 'display:none' : '' ?>"><?= count($unreadNotifs) ?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="width:320px;max-height:400px;overflow-y:auto;" id="notifList">
+                        <?php if (empty($unreadNotifs)): ?>
+                        <li class="text-center py-3 text-muted small">Nenhuma notificação</li>
+                        <?php else: ?>
+                        <?php foreach ($unreadNotifs as $n): ?>
+                        <li><a class="dropdown-item notif-item" href="<?= $n['link'] ?? '#' ?>" data-id="<?= $n['id'] ?>">
+                            <div class="small"><?= htmlspecialchars($n['message']) ?></div>
+                            <small class="text-muted"><?= timeAgo($n['created_at']) ?></small>
+                        </a></li>
+                        <?php endforeach; ?>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li class="text-center"><a class="dropdown-item small text-primary" href="#" id="markAllRead">Marcar todas como lidas</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </li>
+                <?php endif; ?>
                 <li class="nav-item dropdown user-dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <img src="<?= avatarUrl(Auth::user()) ?>" class="avatar">
