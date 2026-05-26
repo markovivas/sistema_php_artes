@@ -1,0 +1,47 @@
+body {
+    background: #f5f6fa;
+    font-size: .9rem;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+    border-radius: 8px;
+}
+
+.table th {
+    font-weight: 600;
+    font-size: .8rem;
+    text-transform: uppercase;
+}
+
+.kanban-column .card-header {
+    border-radius: 8px 8px 0 0;
+}
+
+.kanban-card {
+    cursor: default;
+    transition: box-shadow .15s;
+}
+
+.kanban-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+
+.chat-messages p {
+    background: #e9ecef;
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 12px;
+    max-width: 80%;
+}
+
+.text-end p {
+    background: #0d6efd;
+    color: #fff;
+}
