@@ -6,7 +6,8 @@ define('DB_HOST', 'db');
 define('DB_NAME', 'artes');
 define('DB_USER', 'artes');
 define('DB_PASS', 'artes');
-define('BASE_URL', 'http://localhost');
+$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+define('BASE_URL', $protocol . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost'));
 define('UPLOAD_DIR', __DIR__ . '/../assets/uploads/orders/');
 
 define('ROLES', [
