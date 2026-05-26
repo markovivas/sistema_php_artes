@@ -97,11 +97,12 @@ docker-compose up -d
 
 ## Funcionalidades Futuras
 
+- Menu contextual nos cards do Kanban (detalhes e troca de status com dropdown)
 - Integração WhatsApp (WAHA API)
 - Notificações em tempo real (Pusher/WebSocket)
 - Automação com n8n
 - Geração de PDF com DomPDF
-- App mobile
+- App mobile nativo
 - CRM integrado
 - Integração Canva/Figma
 - Painel TV para produção

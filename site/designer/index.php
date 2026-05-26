@@ -166,25 +166,10 @@ require_once __DIR__ . '/../includes/header.php';
                             </span>
                         </div>
 
-                        <?php if (Auth::hasRole(['admin', 'designer'])): ?>
-                        <div class="dropdown">
-                            <button class="btn btn-sm btn-light py-0 px-1" data-bs-toggle="dropdown" data-bs-boundary="window"><i class="bi bi-three-dots-vertical"></i></button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                                <li><a class="dropdown-item" href="../client/order-detail.php?id=<?= $o['id'] ?>"><i class="bi bi-eye me-2"></i>Detalhes</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <?php foreach (array_diff($statuses, [$status]) as $s): ?>
-                                <li><a class="dropdown-item status-change" href="#" data-id="<?= $o['id'] ?>" data-status="<?= $s ?>">
-                                    <i class="bi bi-arrow-right me-2"></i><?= ORDER_STATUS[$s] ?>
-                                </a></li>
-                                <?php endforeach; ?>
-                                <?php if (Auth::hasRole('admin')): ?>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item assign-designer" href="#" data-id="<?= $o['id'] ?>" data-designer="<?= $o['designer_id'] ?? '' ?>">
-                                    <i class="bi bi-person-plus me-2"></i>Atribuir Designer
-                                </a></li>
-                                <?php endif; ?>
-                            </ul>
-                        </div>
+                        <?php if (Auth::hasRole('admin')): ?>
+                        <button class="btn btn-sm btn-light py-0 px-1 assign-designer" data-id="<?= $o['id'] ?>" data-designer="<?= $o['designer_id'] ?? '' ?>" title="Atribuir Designer">
+                            <i class="bi bi-person-plus"></i>
+                        </button>
                         <?php endif; ?>
                     </div>
                 </div>
