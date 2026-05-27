@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/waha.php';
 Auth::requireRole(['admin', 'designer', 'production', 'financial']);
 
 $user = Auth::user();
@@ -23,8 +24,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_status'])) {
     $statusLabel = ORDER_STATUS[$newStatus];
     if ($newStatus === 'aguardando_cliente') {
         addNotification($o['client_id'], "Pedido #{$orderId} — {$o['title']} está aguardando sua aprovação!", "/client/order-detail.php?id={$orderId}");
+        $clientData = $db->fetch("SELECT whatsapp, name FROM users WHERE id = ?", [$o['client_id']]);
+        if (!empty($clientData['whatsapp'])) {
+            $waha = new WAHA();
+            $chatId = WAHA::formatPhone($clientData['whatsapp']) . '@c.us';
+            $waha->sendText($chatId, "*{$clientData['name']}*, seu pedido #{$orderId} — \"{$o['title']}\" está aguardando sua aprovação!");
+        }
     } elseif ($newStatus === 'finalizado') {
         addNotification($o['client_id'], "Pedido #{$orderId} — {$o['title']} foi finalizado!", "/client/order-detail.php?id={$orderId}");
+        $clientData = $db->fetch("SELECT whatsapp, name FROM users WHERE id = ?", [$o['client_id']]);
+        if (!empty($clientData['whatsapp'])) {
+            $waha = new WAHA();
+            $chatId = WAHA::formatPhone($clientData['whatsapp']) . '@c.us';
+            $waha->sendText($chatId, "*{$clientData['name']}*, seu pedido #{$orderId} — \"{$o['title']}\" foi finalizado! Acesse para baixar os arquivos.");
+        }
     }
     if ($o['designer_id'] && $o['designer_id'] != $user['id']) {
         addNotification($o['designer_id'], "Pedido #{$orderId} — status alterado para: {$statusLabel}", "/client/order-detail.php?id={$orderId}");
@@ -64,6 +77,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['quick_create'])) {
         "INSERT INTO order_timeline (order_id, user_id, action, description) VALUES (?, ?, 'criado', 'Pedido criado via kanban')",
         [$orderId, $user['id']]
     );
+
+    // Notificação WhatsApp para o cliente
+    $clientData = $db->fetch("SELECT whatsapp, name FROM users WHERE id = ?", [$_POST['client_id']]);
+    if (!empty($clientData['whatsapp'])) {
+        $waha = new WAHA();
+        $chatId = WAHA::formatPhone($clientData['whatsapp']) . '@c.us';
+        $waha->sendText($chatId, "*{$clientData['name']}*, seu pedido #{$orderId} — \"{$_POST['title']}\" foi criado com sucesso!");
+    }
+
     header('Content-Type: application/json');
     echo json_encode(['success' => true, 'order_id' => $orderId]);
     exit;

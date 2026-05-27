@@ -38,6 +38,7 @@
                 <?php endif; ?>
                 <?php if (Auth::hasRole('admin')): ?>
                 <li class="nav-item"><a class="nav-link <?= basename($_SERVER['PHP_SELF']) === 'users.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>/admin/users.php"><i class="bi bi-people-fill"></i>Usuários</a></li>
+                <li class="nav-item"><a class="nav-link <?= basename($_SERVER['PHP_SELF']) === 'whatsapp.php' ? 'active' : '' ?>" href="<?= BASE_URL ?>/admin/whatsapp.php"><i class="bi bi-whatsapp"></i>WhatsApp</a></li>
                 <?php endif; ?>
                 <?php if (Auth::hasRole(['admin', 'designer', 'production'])): ?>
                 <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>/production/tv.php" target="_blank"><i class="bi bi-tv-fill"></i>TV</a></li>

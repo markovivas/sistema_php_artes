@@ -53,6 +53,11 @@ function avatarUrl($user) {
 
 function addNotification($userId, $message, $link = null) {
     $db = Database::getInstance();
+    // Garante que o diretório de logs existe para o WAHA
+    $logDir = __DIR__ . '/../storage/logs';
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0777, true);
+    }
     $db->insert(
         "INSERT INTO notifications (user_id, message, link) VALUES (?, ?, ?)",
         [$userId, $message, $link]

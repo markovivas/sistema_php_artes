@@ -45,5 +45,25 @@ services:
       - ./site:/var/www/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
 
+  waha:
+    image: devlikeapro/waha:latest
+    container_name: artes_waha
+    restart: unless-stopped
+    depends_on:
+      - nginx
+    ports:
+      - "3000:3000"
+    environment:
+      - WAHA_API_KEY=dec771db080c466da9a621b11e457358
+      - WAHA_DASHBOARD_USERNAME=admin
+      - WAHA_DASHBOARD_PASSWORD=849c3b3edc224ff8ae3745e9b008852d
+      - WHATSAPP_SWAGGER_USERNAME=admin
+      - WHATSAPP_SWAGGER_PASSWORD=849c3b3edc224ff8ae3745e9b008852d
+      - WHATSAPP_HOOK_URL=http://nginx/api/whatsapp-webhook.php
+      - WHATSAPP_HOOK_EVENTS=message
+    volumes:
+      - waha_data:/app/sessions
+
 volumes:
   db_data:
+  waha_data:

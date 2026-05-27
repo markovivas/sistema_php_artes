@@ -10,17 +10,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save'])) {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $role = $_POST['role'];
+    $whatsapp = preg_replace('/\D/', '', $_POST['whatsapp'] ?? '');
+    
+    // Garante o prefixo 55 (Brasil) se não existir
+    if (strlen($whatsapp) > 0 && substr($whatsapp, 0, 2) !== '55') {
+        $whatsapp = '55' . $whatsapp;
+    }
+
     $id = $_POST['id'] ?? 0;
 
     if ($id) {
-        $db->query("UPDATE users SET name = ?, email = ?, role = ? WHERE id = ?", [$name, $email, $role, $id]);
+        $db->query("UPDATE users SET name = ?, email = ?, role = ?, whatsapp = ? WHERE id = ?", [$name, $email, $role, $whatsapp, $id]);
         if (!empty($_POST['password'])) {
             $hash = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $db->query("UPDATE users SET password = ? WHERE id = ?", [$hash, $id]);
         }
     } else {
         $hash = password_hash($_POST['password'] ?? '123456', PASSWORD_DEFAULT);
-        $db->insert("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)", [$name, $email, $hash, $role]);
+        $newId = $db->insert("INSERT INTO users (name, email, password, role, whatsapp) VALUES (?, ?, ?, ?, ?)", [$name, $email, $hash, $role, $whatsapp]);
     }
     header('Location: users.php');
     exit;
@@ -73,6 +80,10 @@ require_once __DIR__ . '/../includes/header.php';
                             <?php endforeach; ?>
                         </select>
                     </div>
+                    <div class="mb-3" id="whatsappField">
+                        <label class="form-label small">WhatsApp (com DDD)</label>
+                        <input type="text" name="whatsapp" class="form-control form-modern" value="<?= htmlspecialchars($editUser['whatsapp'] ?? '') ?>" placeholder="(11) 99999-0000" maxlength="16" oninput="maskWhatsApp(this)">
+                    </div>
                     <button type="submit" name="save" class="btn btn-modern btn-primary w-100">Salvar</button>
                     <?php if ($editUser): ?>
                     <a href="users.php" class="btn btn-modern btn-outline w-100 mt-1">Cancelar</a>
@@ -91,6 +102,7 @@ require_once __DIR__ . '/../includes/header.php';
                             <th>Nome</th>
                             <th>E-mail</th>
                             <th>Perfil</th>
+                            <th>WhatsApp</th>
                             <th>Ativo</th>
                             <th></th>
                         </tr>
@@ -101,6 +113,7 @@ require_once __DIR__ . '/../includes/header.php';
                             <td class="fw-semibold"><?= htmlspecialchars($u['name']) ?></td>
                             <td><?= htmlspecialchars($u['email']) ?></td>
                             <td><span class="badge badge-modern bg-info"><?= ROLES[$u['role']] ?></span></td>
+                            <td><?= $u['whatsapp'] ? preg_replace('/(?:55)?(\d{2})(\d{4,5})(\d{4})/', '($1) $2-$3', $u['whatsapp']) : '' ?></td>
                             <td><?= $u['active'] ? '<span class="text-success"><i class="bi bi-check-circle-fill"></i></span>' : '<span class="text-danger"><i class="bi bi-x-circle-fill"></i></span>' ?></td>
                             <td>
                                 <a href="?edit=<?= $u['id'] ?>" class="btn btn-modern btn-outline btn-sm"><i class="bi bi-pencil"></i></a>
@@ -116,4 +129,18 @@ require_once __DIR__ . '/../includes/header.php';
         </div>
     </div>
 </div>
+<script>
+function maskWhatsApp(el) {
+    let v = el.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) {
+        v = '(' + v.slice(0, 2) + ') ' + v.slice(2, 7) + '-' + v.slice(7);
+    } else if (v.length > 2) {
+        v = '(' + v.slice(0, 2) + ') ' + v.slice(2);
+    } else if (v.length > 0) {
+        v = '(' + v;
+    }
+    el.value = v;
+}
+</script>
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>

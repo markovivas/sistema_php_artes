@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/waha.php';
 Auth::requireLogin();
 
 $user = Auth::user();
@@ -24,6 +25,14 @@ if ($_GET['action'] === 'approve') {
     $db->query("UPDATE orders SET status = 'em_producao' WHERE id = ?", [$orderId]);
     $db->insert("INSERT INTO order_timeline (order_id, user_id, action, description) VALUES (?, ?, 'aprovado', 'Cliente aprovou a arte')", [$orderId, $user['id']]);
     addNotification($order['designer_id'], "Pedido #{$orderId} foi aprovado pelo cliente.", "/client/order-detail.php?id={$orderId}");
+    if ($order['designer_id']) {
+        $designerData = $db->fetch("SELECT whatsapp, name FROM users WHERE id = ?", [$order['designer_id']]);
+        if (!empty($designerData['whatsapp'])) {
+            $waha = new WAHA();
+            $chatId = WAHA::formatPhone($designerData['whatsapp']) . '@c.us';
+            $waha->sendText($chatId, "{$user['name']} aprovou o pedido #{$orderId}!");
+        }
+    }
     header('Location: order-detail.php?id=' . $orderId); exit;
 }
 
@@ -31,6 +40,14 @@ if ($_GET['action'] === 'request_changes') {
     $db->query("UPDATE orders SET status = 'ajustes' WHERE id = ?", [$orderId]);
     $db->insert("INSERT INTO order_timeline (order_id, user_id, action, description) VALUES (?, ?, 'solicitou_ajustes', 'Cliente solicitou ajustes')", [$orderId, $user['id']]);
     addNotification($order['designer_id'], "Pedido #{$orderId} — cliente solicitou ajustes.", "/client/order-detail.php?id={$orderId}");
+    if ($order['designer_id']) {
+        $designerData = $db->fetch("SELECT whatsapp, name FROM users WHERE id = ?", [$order['designer_id']]);
+        if (!empty($designerData['whatsapp'])) {
+            $waha = new WAHA();
+            $chatId = WAHA::formatPhone($designerData['whatsapp']) . '@c.us';
+            $waha->sendText($chatId, "{$user['name']} solicitou ajustes no pedido #{$orderId}.");
+        }
+    }
     header('Location: order-detail.php?id=' . $orderId); exit;
 }
 

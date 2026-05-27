@@ -4,10 +4,11 @@ Sistema web completo para gestão de pedidos de arte com múltiplos perfis de us
 
 ## Stack
 
-- **PHP 8.2** (FPM)
+- **PHP 8.2** (FPM, com extensão curl)
 - **MySQL 8.0**
 - **Nginx**
 - **Docker**
+- **WAHA API** (WhatsApp HTTP API)
 
 ## Estrutura do Projeto
 
@@ -19,13 +20,17 @@ Sistema web completo para gestão de pedidos de arte com múltiplos perfis de us
 │   └── Dockerfile
 └── site/
     ├── database.sql
+    ├── migration-whatsapp.sql
     ├── login.php
     ├── index.php
+    ├── api/
+    │   └── whatsapp-webhook.php
     ├── includes/
     │   ├── config.php
     │   ├── db.php
     │   ├── auth.php
     │   ├── functions.php
+    │   ├── waha.php
     │   ├── header.php
     │   └── footer.php
     ├── client/
@@ -36,6 +41,7 @@ Sistema web completo para gestão de pedidos de arte com múltiplos perfis de us
     │   └── index.php
     ├── admin/
     │   ├── index.php
+    │   ├── whatsapp.php
     │   ├── users.php
     │   └── finances.php
     └── assets/
@@ -47,12 +53,49 @@ Sistema web completo para gestão de pedidos de arte com múltiplos perfis de us
 ## Como Rodar
 
 ```bash
-docker-compose up -d
+# 1. Iniciar containers
+docker-compose up -d --build
+
+# 2. Importar banco de dados
+Acesse http://localhost:8080 (phpMyAdmin) e importe site/database.sql
+
+# 3. Executar migration WhatsApp (se o banco já existir)
+docker exec -i artes_db mysql -uroot -proot artes < site/migration-whatsapp.sql
+
+# 4. Acessar http://localhost
 ```
 
-1. Acesse `http://localhost:8080` (phpMyAdmin)
-2. Importe o arquivo `site/database.sql`
-3. Acesse `http://localhost`
+## WhatsApp (WAHA API)
+
+O sistema envia notificações automáticas via WhatsApp quando:
+
+| Evento | Notificação |
+|--------|-------------|
+| Status muda para "Aguardando Cliente" | Cliente recebe aviso para aprovar |
+| Status muda para "Finalizado" | Cliente recebe aviso com arquivos |
+| Cliente aprova a arte | Designer é notificado |
+| Cliente solicita ajustes | Designer é notificado |
+
+**Para conectar:**
+
+1. Acesse **Admin > WhatsApp**
+2. Clique em "Conectar WhatsApp"
+3. Escaneie o QR Code com o celular
+4. Cadastre o número dos clientes em **Admin > Usuários** (campo WhatsApp, apenas números com DDD)
+
+Mensagens recebidas dos clientes no WhatsApp são automaticamente adicionadas como comentários no pedido ativo.
+
+### Credenciais WAHA
+
+> As credenciais persistem no `docker-compose.yml` e são injetadas como variáveis de ambiente no container.
+
+| Serviço | Usuário | Senha / Chave |
+|---------|---------|---------------|
+| Swagger UI (`http://localhost:3005`) | `admin` | `849c3b3edc224ff8ae3745e9b008852d` |
+| Dashboard WAHA | `admin` | `849c3b3edc224ff8ae3745e9b008852d` |
+| API Key (usada pelo PHP internamente) | — | `dec771db080c466da9a621b11e457358` |
+
+**Atenção:** O Swagger UI e o Dashboard são acessíveis em `http://localhost:3005` — útil para depuração e envio manual de mensagens.
 
 ## Usuários de Teste
 
@@ -84,6 +127,7 @@ docker-compose up -d
 - KPIs: pedidos do dia, produção ativa, faturamento mensal, ticket médio
 - Financeiro: contas a pagar/receber, fluxo de caixa
 - Gerenciamento de usuários (CRUD completo)
+- Conexão WhatsApp via QR Code (WAHA API)
 
 ## Níveis de Usuário
 
@@ -98,7 +142,6 @@ docker-compose up -d
 ## Funcionalidades Futuras
 
 - Menu contextual nos cards do Kanban (detalhes e troca de status com dropdown)
-- Integração WhatsApp (WAHA API)
 - Notificações em tempo real (Pusher/WebSocket)
 - Automação com n8n
 - Geração de PDF com DomPDF

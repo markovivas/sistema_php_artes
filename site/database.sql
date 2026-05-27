@@ -7,6 +7,7 @@ CREATE TABLE users (
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('admin','designer','production','financial','client') NOT NULL DEFAULT 'client',
+    whatsapp VARCHAR(20) DEFAULT NULL,
     avatar VARCHAR(255) DEFAULT NULL,
     active TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

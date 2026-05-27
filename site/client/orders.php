@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../includes/config.php';
 require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../includes/functions.php';
+require_once __DIR__ . '/../includes/waha.php';
 Auth::requireRole('client');
 
 $user = Auth::user();
@@ -22,6 +23,14 @@ if ($action === 'new' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         "INSERT INTO order_timeline (order_id, user_id, action, description) VALUES (?, ?, 'criado', 'Pedido criado pelo cliente')",
         [$orderId, $user['id']]
     );
+
+    // Notificação WhatsApp para o cliente
+    $clientData = $db->fetch("SELECT whatsapp, name FROM users WHERE id = ?", [$user['id']]);
+    if (!empty($clientData['whatsapp'])) {
+        $waha = new WAHA();
+        $chatId = WAHA::formatPhone($clientData['whatsapp']) . '@c.us';
+        $waha->sendText($chatId, "*{$clientData['name']}*, seu pedido foi criado com sucesso e tem o ID #{$orderId}");
+    }
 
     header('Location: order-detail.php?id=' . $orderId);
     exit;
