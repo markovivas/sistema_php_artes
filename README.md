@@ -2,6 +2,15 @@
 
 Sistema web completo para gestão de pedidos de arte com múltiplos perfis de usuário.
 
+## Identidade Visual
+
+| Cor | Hexadecimal | Uso |
+|-----|-------------|-----|
+| Azul | `#40adec` | Primary, botões, links |
+| Verde | `#88bd46` | Success, status positivos |
+| Amarelo | `#f7c72b` | Warning, prioridade alta |
+| Vermelho | `#e33e3c` | Danger, urgências |
+
 ## Stack
 
 - **PHP 8.2** (FPM, com extensão curl)
@@ -96,6 +105,10 @@ Mensagens recebidas dos clientes no WhatsApp são automaticamente adicionadas co
 | API Key (usada pelo PHP internamente) | — | `dec771db080c466da9a621b11e457358` |
 
 **Atenção:** O Swagger UI e o Dashboard são acessíveis em `http://localhost:3005` — útil para depuração e envio manual de mensagens.
+
+## Cadastro
+
+Novos usuários podem se cadastrar como **Cliente** diretamente pela tela de login, clicando em "Cadastrar novo usuário". O formulário solicita nome, e-mail, senha, WhatsApp e setor.
 
 ## Usuários de Teste
 

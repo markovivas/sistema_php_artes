@@ -43,7 +43,7 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
         }
 
         .tv-header {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #0d3b66 100%);
             padding: 16px 32px;
             display: flex;
             align-items: center;
@@ -55,7 +55,7 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
         .tv-header h1 {
             font-size: 1.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #8B85FF, #6C63FF);
+            background: linear-gradient(135deg, #66c0f0, #40adec);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -147,9 +147,9 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
         }
 
         .tv-card:hover { background: rgba(255,255,255,.07); }
-        .tv-card.urgent { border-left-color: #E17055; }
-        .tv-card.high { border-left-color: #FDCB6E; }
-        .tv-card.normal { border-left-color: #74B9FF; }
+        .tv-card.urgent { border-left-color: #e33e3c; }
+        .tv-card.high { border-left-color: #f7c72b; }
+        .tv-card.normal { border-left-color: #40adec; }
         .tv-card.low { border-left-color: #636E72; }
 
         .tv-card .order-id {
@@ -184,9 +184,9 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
             font-weight: 600;
         }
 
-        .tv-card .priority-badge.urgent { background: rgba(225,112,85,.2); color: #E17055; }
-        .tv-card .priority-badge.high { background: rgba(253,203,110,.2); color: #FDCB6E; }
-        .tv-card .priority-badge.normal { background: rgba(116,185,255,.2); color: #74B9FF; }
+        .tv-card .priority-badge.urgent { background: rgba(227,62,60,.2); color: #e33e3c; }
+        .tv-card .priority-badge.high { background: rgba(247,199,43,.2); color: #f7c72b; }
+        .tv-card .priority-badge.normal { background: rgba(64,173,236,.2); color: #40adec; }
         .tv-card .priority-badge.low { background: rgba(99,110,114,.2); color: #adb5bd; }
 
         .tv-empty {
@@ -207,7 +207,7 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
             bottom: 0;
             left: 0;
             right: 0;
-            background: linear-gradient(135deg, #00B894, #00A381);
+            background: linear-gradient(135deg, #88bd46, #72a63a);
             padding: 8px 0;
             overflow: hidden;
             height: 36px;
@@ -238,24 +238,25 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
 <body>
     <div class="tv-header">
         <div class="d-flex align-items-center gap-3">
+            <img src="<?= BASE_URL ?>/img/logo.png" alt="ArtES" height="32" class="me-2" style="filter:brightness(0) invert(1);">
             <h1 class="mb-0">ArtES <span style="font-weight:400;color:rgba(255,255,255,.3);-webkit-text-fill-color:rgba(255,255,255,.3);">TV</span></h1>
             <span class="badge" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);font-weight:400;">Produção</span>
         </div>
         <div class="tv-stats">
             <div class="stat">
-                <div class="num" style="color:#E17055;"><?= $totals['urgentes'] ?? 0 ?></div>
+                <div class="num" style="color:#e33e3c;"><?= $totals['urgentes'] ?? 0 ?></div>
                 <div class="lbl">Urgentes</div>
             </div>
             <div class="stat">
-                <div class="num" style="color:#74B9FF;"><?= $totals['novo'] ?? 0 ?></div>
+                <div class="num" style="color:#40adec;"><?= $totals['novo'] ?? 0 ?></div>
                 <div class="lbl">Novos</div>
             </div>
             <div class="stat">
-                <div class="num" style="color:#FDCB6E;"><?= $totals['em_producao'] ?? 0 ?></div>
+                <div class="num" style="color:#f7c72b;"><?= $totals['em_producao'] ?? 0 ?></div>
                 <div class="lbl">Produção</div>
             </div>
             <div class="stat">
-                <div class="num" style="color:#8B85FF;"><?= $totals['ajustes'] ?? 0 ?></div>
+                <div class="num" style="color:#66c0f0;"><?= $totals['ajustes'] ?? 0 ?></div>
                 <div class="lbl">Ajustes</div>
             </div>
             <div class="stat">
@@ -268,7 +269,7 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
 
     <div class="tv-body">
         <div class="tv-column">
-            <div class="tv-column-header" style="background:rgba(13,110,253,.15);color:#74B9FF;">
+            <div class="tv-column-header" style="background:rgba(64,173,236,.15);color:#40adec;">
                 <span><i class="bi bi-inbox-fill me-2"></i>Novos</span>
                 <span class="count"><?= $totals['novo'] ?? 0 ?></span>
             </div>
@@ -295,7 +296,7 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
         </div>
 
         <div class="tv-column">
-            <div class="tv-column-header" style="background:rgba(255,193,7,.15);color:#FDCB6E;">
+            <div class="tv-column-header" style="background:rgba(247,199,43,.15);color:#f7c72b;">
                 <span><i class="bi bi-gear-wide-connected me-2"></i>Em Produção</span>
                 <span class="count"><?= $totals['em_producao'] ?? 0 ?></span>
             </div>
@@ -320,7 +321,7 @@ $totals['urgentes'] = count(array_filter($orders, fn($o) => $o['priority'] === '
         </div>
 
         <div class="tv-column">
-            <div class="tv-column-header" style="background:rgba(13,202,240,.15);color:#74B9FF;">
+            <div class="tv-column-header" style="background:rgba(64,173,236,.15);color:#40adec;">
                 <span><i class="bi bi-arrow-repeat me-2"></i>Ajustes</span>
                 <span class="count"><?= $totals['ajustes'] ?? 0 ?></span>
             </div>

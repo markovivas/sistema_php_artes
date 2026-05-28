@@ -60,4 +60,34 @@ class Auth {
     public static function hasRole($roles) {
         return in_array(self::role(), (array)$roles);
     }
+
+    public static function register($data) {
+        $db = Database::getInstance();
+
+        $existing = $db->fetch("SELECT id FROM users WHERE email = ?", [$data['email']]);
+        if ($existing) {
+            return 'Este e-mail já está cadastrado.';
+        }
+
+        $hash = password_hash($data['password'], PASSWORD_DEFAULT);
+        $userId = $db->insert(
+            "INSERT INTO users (name, email, password, role, whatsapp) VALUES (?, ?, ?, 'client', ?)",
+            [$data['name'], $data['email'], $hash, $data['whatsapp'] ?? null]
+        );
+
+        if (!empty($data['company'])) {
+            $db->insert(
+                "INSERT INTO clients (user_id, company, phone) VALUES (?, ?, ?)",
+                [$userId, $data['company'], $data['whatsapp'] ?? null]
+            );
+        }
+
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['user_name'] = $data['name'];
+        $_SESSION['user_email'] = $data['email'];
+        $_SESSION['user_role'] = 'client';
+        $_SESSION['user_avatar'] = null;
+
+        return true;
+    }
 }

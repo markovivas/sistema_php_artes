@@ -1,13 +1,13 @@
 /* ─── Design System ─── */
 :root {
-    --primary: #6C63FF;
-    --primary-dark: #5A52D5;
-    --primary-light: #8B85FF;
+    --primary: #40adec;
+    --primary-dark: #3598d4;
+    --primary-light: #66c0f0;
     --secondary: #2D3436;
-    --success: #00B894;
-    --warning: #FDCB6E;
-    --danger: #E17055;
-    --info: #74B9FF;
+    --success: #88bd46;
+    --warning: #f7c72b;
+    --danger: #e33e3c;
+    --info: #40adec;
     --bg: #F0F2F5;
     --bg-card: #FFFFFF;
     --text: #2D3436;
@@ -132,11 +132,11 @@ body {
 .stat-card .stat-value { font-size: 1.75rem; font-weight: 800; line-height: 1.2; }
 .stat-card .stat-label { font-size: .8rem; opacity: .85; margin: 0; }
 
-.stat-card.bg-gradient-primary { background: linear-gradient(135deg, #6C63FF, #4834D4); }
-.stat-card.bg-gradient-success { background: linear-gradient(135deg, #00B894, #00A381); }
-.stat-card.bg-gradient-warning { background: linear-gradient(135deg, #FDCB6E, #F0A500); }
-.stat-card.bg-gradient-info { background: linear-gradient(135deg, #74B9FF, #0984E3); }
-.stat-card.bg-gradient-danger { background: linear-gradient(135deg, #E17055, #D63031); }
+.stat-card.bg-gradient-primary { background: linear-gradient(135deg, #40adec, #3598d4); }
+.stat-card.bg-gradient-success { background: linear-gradient(135deg, #88bd46, #72a63a); }
+.stat-card.bg-gradient-warning { background: linear-gradient(135deg, #f7c72b, #dbb01f); }
+.stat-card.bg-gradient-info { background: linear-gradient(135deg, #66c0f0, #3598d4); }
+.stat-card.bg-gradient-danger { background: linear-gradient(135deg, #e33e3c, #c62e2c); }
 .stat-card.bg-gradient-secondary { background: linear-gradient(135deg, #636E72, #2D3436); }
 
 /* ─── Tables ─── */
@@ -161,7 +161,7 @@ body {
     border-bottom: 1px solid var(--border);
 }
 
-.table-modern tbody tr:hover { background: rgba(108, 99, 255, .03); }
+.table-modern tbody tr:hover { background: rgba(64, 173, 236, .03); }
 .table-modern tbody tr:last-child td { border-bottom: none; }
 
 /* ─── Buttons ─── */
@@ -181,7 +181,7 @@ body {
 
 .btn-modern.btn-primary:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(108, 99, 255, .35);
+    box-shadow: 0 4px 12px rgba(64, 173, 236, .35);
 }
 
 .btn-modern.btn-outline {
@@ -212,13 +212,13 @@ body {
 
 .form-modern:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, .12);
+    box-shadow: 0 0 0 3px rgba(64, 173, 236, .12);
 }
 
 /* ─── Kanban ─── */
 .kanban-board { padding-bottom: 20px; }
 .kanban-column { min-width: 280px; flex: 1; transition: opacity .2s; }
-.kanban-column.drag-over .card-body { background: rgba(108, 99, 255, .04); }
+.kanban-column.drag-over .card-body { background: rgba(64, 173, 236, .04); }
 
 .kanban-column .card-header {
     border-radius: var(--radius) var(--radius) 0 0;
@@ -371,7 +371,7 @@ body {
     position: absolute;
     width: 600px;
     height: 600px;
-    background: radial-gradient(circle, rgba(108,99,255,.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(64,173,236,.15) 0%, transparent 70%);
     top: -200px;
     right: -200px;
     border-radius: 50%;
@@ -382,7 +382,7 @@ body {
     position: absolute;
     width: 400px;
     height: 400px;
-    background: radial-gradient(circle, rgba(0,184,148,.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(136,189,70,.1) 0%, transparent 70%);
     bottom: -150px;
     left: -150px;
     border-radius: 50%;
@@ -419,7 +419,7 @@ body {
 .login-card .form-control:focus {
     background: rgba(255,255,255,.08);
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(108,99,255,.2);
+    box-shadow: 0 0 0 3px rgba(64,173,236,.2);
     color: #fff;
 }
 
@@ -434,7 +434,7 @@ body {
     transition: var(--transition);
 }
 
-.login-card .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(108,99,255,.4); }
+.login-card .btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(64,173,236,.4); }
 .login-card .test-users { border-top: 1px solid rgba(255,255,255,.06); margin-top: 24px; padding-top: 20px; }
 
 /* ─── Modals ─── */

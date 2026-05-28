@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#6C63FF">
+    <meta name="theme-color" content="#40adec">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="<?= BASE_URL ?>/manifest.json">
@@ -19,7 +19,9 @@
 <?php if (Auth::check()): ?>
 <nav class="navbar navbar-expand-lg navbar-dark navbar-artes">
     <div class="container-fluid">
-        <a class="navbar-brand" href="<?= BASE_URL ?>/">ArtES</a>
+        <a class="navbar-brand d-flex align-items-center" href="<?= BASE_URL ?>/">
+            <img src="<?= BASE_URL ?>/img/logo.png" alt="ArtES" height="32" class="me-2">
+        </a>
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
