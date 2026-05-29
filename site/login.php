@@ -63,84 +63,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css">
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/style.css">
-    <style>
-        .login-card .form-toggle { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.06); }
-        .login-card .form-toggle a { color: rgba(255,255,255,.6); text-decoration: none; font-size: .85rem; cursor: pointer; transition: color .2s; }
-        .login-card .form-toggle a:hover { color: var(--primary); }
-        .login-card .form-toggle a i { margin-right: 6px; }
-    </style>
 </head>
 <body class="login-page">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-5">
-                <div class="login-card">
-                    <div class="text-center mb-4">
-                        <img src="<?= BASE_URL ?>/img/logo.png" alt="ArtES" height="48" class="mb-3">
-                        <p class="text-white-50" style="font-size: .9rem;">Sistema de Gerenciamento de Artes</p>
-                    </div>
-                    <?php if ($error): ?>
-                        <div class="alert alert-danger bg-danger bg-opacity-25 text-white border-0 small"><?= $error ?></div>
-                    <?php endif; ?>
-                    <?php if ($success): ?>
-                        <div class="alert alert-success bg-success bg-opacity-25 text-white border-0 small"><?= $success ?></div>
-                    <?php endif; ?>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-overlay"></div>
 
-                    <!-- Login Form -->
-                    <form method="POST" id="loginForm">
-                        <input type="hidden" name="action" value="login">
-                        <div class="mb-3">
-                            <label class="form-label">E-mail</label>
-                            <input type="email" name="email" class="form-control" placeholder="seu@email.com" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Senha</label>
-                            <input type="password" name="password" class="form-control" placeholder="••••••" required>
-                        </div>
-                        <button type="submit" class="btn btn-login btn-lg w-100 text-white">Entrar</button>
-                    </form>
+    <div class="login-shell">
+        <div class="login-card">
+            <div class="login-brand">
+                <img src="<?= BASE_URL ?>/img/logo.png" alt="ArtES" class="login-logo">
+            </div>
+            <p class="login-sub" style="display:none">Sistema de Gerenciamento de Artes</p>
 
-                    <!-- Register Form -->
-                    <form method="POST" id="registerForm" style="display:none;">
-                        <input type="hidden" name="action" value="register">
-                        <div class="mb-3">
-                            <label class="form-label">Nome completo</label>
-                            <input type="text" name="name" class="form-control" placeholder="Seu nome" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">E-mail</label>
-                            <input type="email" name="email" class="form-control" placeholder="seu@email.com" required>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6 mb-3 mb-md-0">
-                                <label class="form-label">Senha</label>
-                                <input type="password" name="password" class="form-control" placeholder="Mín. 6 caracteres" required minlength="6">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Confirmar senha</label>
-                                <input type="password" name="confirm_password" class="form-control" placeholder="Repita a senha" required minlength="6">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">WhatsApp <span class="text-white-50">(opcional)</span></label>
-                            <input type="text" name="whatsapp" id="whatsapp" class="form-control" placeholder="(35) 98877-0000">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Setor <span class="text-white-50">(opcional)</span></label>
-                            <input type="text" name="company" class="form-control" placeholder="Nome do setor">
-                        </div>
-                        <button type="submit" class="btn btn-login btn-lg w-100 text-white">Cadastrar</button>
-                    </form>
+            <?php if ($error): ?>
+                <div class="login-error"><?= $error ?></div>
+            <?php endif; ?>
 
-                    <div class="form-toggle">
-                        <a href="#" id="toggleFormLink"><i class="bi bi-person-plus"></i> Cadastrar novo usuário</a>
-                    </div>
+            <form method="POST" id="loginForm" class="login-form">
+                <input type="hidden" name="action" value="login">
+                <div class="field-group">
+                    <label>E-mail</label>
+                    <input type="email" name="email" placeholder="seu@email.com" required>
                 </div>
+                <div class="field-group">
+                    <label>Senha</label>
+                    <input type="password" name="password" placeholder="••••••" required>
+                </div>
+                <button type="submit" class="login-btn">Entrar</button>
+            </form>
+
+            <form method="POST" id="registerForm" class="login-form" style="display:none;">
+                <input type="hidden" name="action" value="register">
+                <div class="field-group">
+                    <label>Nome completo</label>
+                    <input type="text" name="name" placeholder="Seu nome" required>
+                </div>
+                <div class="field-group">
+                    <label>E-mail</label>
+                    <input type="email" name="email" placeholder="seu@email.com" required>
+                </div>
+                <div class="field-group">
+                    <label>Senha</label>
+                    <input type="password" name="password" placeholder="Mín. 6 caracteres" required minlength="6">
+                </div>
+                <div class="field-group">
+                    <label>Confirmar senha</label>
+                    <input type="password" name="confirm_password" placeholder="Repita a senha" required minlength="6">
+                </div>
+                <div class="field-group">
+                    <label>WhatsApp <span style="color:#64748b;font-weight:400;">(opcional)</span></label>
+                    <input type="text" name="whatsapp" id="whatsapp" placeholder="(35) 98877-0000">
+                </div>
+                <div class="field-group">
+                    <label>Setor <span style="color:#64748b;font-weight:400;">(opcional)</span></label>
+                    <input type="text" name="company" placeholder="Nome do setor">
+                </div>
+                <button type="submit" class="login-btn">Cadastrar</button>
+            </form>
+
+            <div class="login-toggle">
+                <a href="#" id="toggleFormLink"><i class="bi bi-person-plus"></i> Cadastrar novo usuário</a>
             </div>
         </div>
     </div>
+
     <script>
-        // WhatsApp mask
         document.getElementById('whatsapp')?.addEventListener('input', function(e) {
             let v = this.value.replace(/\D/g, '').slice(0, 11);
             if (v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
@@ -156,10 +145,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const link = this;
             if (registerForm.style.display === 'none') {
                 loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
+                registerForm.style.display = 'flex';
                 link.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> Voltar para o login';
             } else {
-                loginForm.style.display = 'block';
+                loginForm.style.display = 'flex';
                 registerForm.style.display = 'none';
                 link.innerHTML = '<i class="bi bi-person-plus"></i> Cadastrar novo usuário';
             }

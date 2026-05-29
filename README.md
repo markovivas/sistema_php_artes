@@ -4,12 +4,39 @@ Sistema web completo para gestão de pedidos de arte com múltiplos perfis de us
 
 ## Identidade Visual
 
+### Login (Glassmorphism Design)
+
+| Cor | Hexadecimal | Uso |
+|-----|-------------|-----|
+| Azul brand | `#2563eb` | Botão primary, inputs foco |
+| Azul accent | `#60a5fa` | Gradiente do botão |
+| Azul soft | `#dbeafe` | Background alerta |
+| Azul shadow | `rgba(37,99,235,.25)` | Sombra do botão |
+| Slate 900 | `#0f172a` | Texto principal |
+| Slate 500 | `#64748b` | Texto secundário |
+| Slate 300 | `#94a3b8` | Placeholder dos inputs |
+| Panel glass | `rgba(248,250,252,.92)` | Card login com blur |
+| Line | `rgba(51,65,85,.12)` | Bordas do card e inputs |
+
+### Sistema (demais páginas)
+
 | Cor | Hexadecimal | Uso |
 |-----|-------------|-----|
 | Azul | `#40adec` | Primary, botões, links |
 | Verde | `#88bd46` | Success, status positivos |
 | Amarelo | `#f7c72b` | Warning, prioridade alta |
 | Vermelho | `#e33e3c` | Danger, urgências |
+
+### Tela de Login
+
+A tela de login utiliza um design moderno com efeito **glassmorphism**:
+
+- **Background:** Gradiente azul claro com `radial-gradient` e grid overlay
+- **Card:** Fundo semi-transparente `rgba(248,250,252,.92)` com `backdrop-filter: blur(14px)`, borda sutil e cantos arredondados (`32px`)
+- **Orbes flutuantes:** 3 esferas animadas com `blur(80px)` nas cores do brand
+- **Formulário:** Inputs com padding generoso (`14px`), borda `14px` de raio e foco com glow azul
+- **Botão:** Gradiente `#2563eb → #60a5fa` com sombra elevada e efeito hover
+- **Responsivo:** Adapta card, inputs e orbes para mobile (breakpoint `540px`)
 
 ## Stack
 
